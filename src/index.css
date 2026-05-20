@@ -1,0 +1,107 @@
+:root {
+  --bg: #020814;
+  --bg-secondary: #07111c;
+  --panel-bg: linear-gradient(180deg, rgba(11, 23, 38, 0.95), rgba(4, 9, 16, 0.94));
+  --panel-border: rgba(147, 186, 217, 0.18);
+  --panel-shadow: 0 18px 60px rgba(0, 0, 0, 0.32);
+  --button-bg: rgba(95, 245, 255, 0.08);
+  --button-border: rgba(95, 245, 255, 0.18);
+  --text-strong: #eff8ff;
+  --text-soft: #bed0e2;
+  --text-muted: #7d95ab;
+  --text-dim: #698097;
+  --grid-line: rgba(95, 245, 255, 0.07);
+  --font-body: 'Space Grotesk', 'Saira Semi Condensed', 'Segoe UI', sans-serif;
+  --font-display: 'Rajdhani', 'Eurostile', 'Avenir Next Condensed', sans-serif;
+
+  color: var(--text-soft);
+  background:
+    radial-gradient(circle at top left, rgba(95, 245, 255, 0.1), transparent 24%),
+    radial-gradient(circle at 80% 20%, rgba(255, 176, 95, 0.08), transparent 18%),
+    linear-gradient(180deg, #06111d 0%, #020814 100%);
+  font: 16px/1.5 var(--font-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), var(--grid-line) calc(100% - 1px)),
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    radial-gradient(circle at top left, rgba(95, 245, 255, 0.08), transparent 28%),
+    linear-gradient(180deg, #06111d 0%, #020814 100%);
+  background-size: 100% 100%, 100% 72px, 100% 100%, 100% 100%;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(95, 245, 255, 0.04), transparent 14%, transparent 86%, rgba(255, 176, 95, 0.04));
+  mix-blend-mode: screen;
+}
+
+#root {
+  width: min(1480px, calc(100% - 2rem));
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 1.5rem 0 2rem;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+strong {
+  color: var(--text-strong);
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+  line-height: 1;
+}
+
+h1 {
+  font-size: clamp(2.6rem, 5vw, 5rem);
+  margin: 0.5rem 0 1rem;
+  letter-spacing: 0.02em;
+}
+
+h2 {
+  font-size: clamp(1.4rem, 2vw, 2rem);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:focus-visible {
+  outline: 2px solid rgba(95, 245, 255, 0.75);
+  outline-offset: 2px;
+}
+
+a {
+  color: inherit;
+}

@@ -1,0 +1,393 @@
+.app-shell {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.command-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(18rem, 0.9fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.command-header__copy,
+.countdown,
+.panel,
+.status-strip article {
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+  box-shadow: var(--panel-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.command-header__copy {
+  position: relative;
+  overflow: hidden;
+  padding: 1.75rem;
+  border-radius: 1.5rem;
+}
+
+.command-header__copy::after {
+  content: '';
+  position: absolute;
+  inset: auto -4rem -5rem auto;
+  width: 16rem;
+  height: 16rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(95, 245, 255, 0.2), rgba(95, 245, 255, 0));
+  pointer-events: none;
+}
+
+.eyebrow,
+.panel__eyebrow,
+.countdown__label,
+.summary-chip span,
+.status-strip span,
+.log-entry span,
+.asset-banner span,
+.asset-banner small,
+.threat-card__headline span,
+.colony-card__headline span,
+.defense-card__headline span,
+.colony-card__footer span,
+.trajectory,
+.colony-route,
+.defense-metrics dt,
+.threat-metrics dt,
+.log-entry__stamp {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+}
+
+.command-brief {
+  max-width: 56rem;
+  color: var(--text-soft);
+}
+
+.countdown {
+  display: grid;
+  align-content: center;
+  gap: 0.65rem;
+  padding: 1.75rem;
+  border-radius: 1.5rem;
+}
+
+.countdown--blue {
+  box-shadow: inset 0 0 0 1px rgba(95, 245, 255, 0.18), 0 0 40px rgba(95, 245, 255, 0.08);
+}
+
+.countdown--amber {
+  box-shadow: inset 0 0 0 1px rgba(255, 176, 95, 0.3), 0 0 40px rgba(255, 176, 95, 0.08);
+}
+
+.countdown--red {
+  box-shadow: inset 0 0 0 1px rgba(255, 102, 102, 0.35), 0 0 48px rgba(255, 102, 102, 0.12);
+}
+
+.countdown__value {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 0.95;
+  font-family: var(--font-display);
+  color: var(--text-strong);
+}
+
+.countdown__note {
+  color: var(--text-soft);
+}
+
+.status-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.status-strip article {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem 1.1rem;
+  border-radius: 1rem;
+}
+
+.status-strip strong,
+.summary-chip strong {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--text-strong);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.panel {
+  padding: 1.3rem;
+  border-radius: 1.35rem;
+  min-height: 26rem;
+}
+
+.panel__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.panel__header h2 {
+  margin-bottom: 0;
+}
+
+.summary-chip {
+  display: grid;
+  gap: 0.25rem;
+  justify-items: end;
+  text-align: right;
+}
+
+.filter-pills {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.filter-pills button,
+.threat-actions button,
+.colony-card__footer button,
+.defense-actions button {
+  border: 1px solid var(--button-border);
+  background: var(--button-bg);
+  color: var(--text-strong);
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.filter-pills button:hover,
+.threat-actions button:hover,
+.colony-card__footer button:hover,
+.defense-actions button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(95, 245, 255, 0.55);
+}
+
+.filter-pills .is-active {
+  background: rgba(95, 245, 255, 0.14);
+  border-color: rgba(95, 245, 255, 0.55);
+}
+
+.button-ghost {
+  background: transparent;
+}
+
+.asset-banner {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  background: rgba(7, 17, 28, 0.82);
+  border: 1px solid rgba(95, 245, 255, 0.12);
+  margin-bottom: 1rem;
+}
+
+.asset-banner strong,
+.threat-card__headline p,
+.colony-card__headline p,
+.defense-card__headline p {
+  color: var(--text-strong);
+}
+
+.threat-list,
+.colony-list,
+.defense-list,
+.log-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.threat-card,
+.colony-card,
+.defense-card,
+.log-entry {
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(4, 10, 18, 0.82);
+  border: 1px solid rgba(147, 186, 217, 0.12);
+}
+
+.threat-card__headline,
+.colony-card__headline,
+.defense-card__headline,
+.colony-card__footer,
+.log-entry {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.severity,
+.route-risk,
+.asset-state {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  height: fit-content;
+}
+
+.severity--critical,
+.route-risk--critical,
+.log-entry--alert {
+  color: #ffb0b0;
+  border: 1px solid rgba(255, 102, 102, 0.28);
+  background: rgba(255, 102, 102, 0.08);
+}
+
+.severity--high,
+.route-risk--elevated,
+.asset-state--engaged {
+  color: #ffd7a8;
+  border: 1px solid rgba(255, 176, 95, 0.28);
+  background: rgba(255, 176, 95, 0.08);
+}
+
+.severity--medium,
+.route-risk--stable,
+.asset-state--standby,
+.asset-state--cooling,
+.asset-state--armed,
+.log-entry--system,
+.log-entry--command {
+  color: #9ceeff;
+  border: 1px solid rgba(95, 245, 255, 0.22);
+  background: rgba(95, 245, 255, 0.07);
+}
+
+.threat-metrics,
+.defense-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 0.9rem 0;
+}
+
+.threat-metrics div,
+.defense-metrics div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.threat-metrics dd,
+.defense-metrics dd {
+  margin: 0;
+  color: var(--text-strong);
+}
+
+.threat-actions,
+.defense-actions {
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.trajectory,
+.colony-route {
+  margin-bottom: 0.9rem;
+}
+
+.progress-track {
+  width: 100%;
+  height: 0.72rem;
+  border-radius: 999px;
+  background: rgba(147, 186, 217, 0.12);
+  overflow: hidden;
+  margin: 0.9rem 0 1rem;
+}
+
+.progress-track__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #5ff5ff 0%, #a8ffc0 100%);
+}
+
+.colony-card__footer {
+  align-items: center;
+}
+
+.defense-card--selected {
+  border-color: rgba(95, 245, 255, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(95, 245, 255, 0.2);
+}
+
+.log-list {
+  max-height: 35rem;
+  overflow: auto;
+  padding-right: 0.2rem;
+}
+
+.log-entry {
+  align-items: flex-start;
+}
+
+.log-entry__stamp {
+  min-width: 4.9rem;
+  color: var(--text-dim);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 1080px) {
+  .command-header,
+  .dashboard-grid,
+  .status-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .panel__header,
+  .threat-card__headline,
+  .colony-card__headline,
+  .defense-card__headline,
+  .colony-card__footer,
+  .log-entry {
+    flex-direction: column;
+  }
+
+  .summary-chip {
+    justify-items: start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 720px) {
+  .threat-metrics,
+  .defense-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .threat-actions,
+  .defense-actions,
+  .filter-pills {
+    flex-direction: column;
+  }
+
+  .filter-pills button,
+  .threat-actions button,
+  .colony-card__footer button,
+  .defense-actions button {
+    width: 100%;
+  }
+}
