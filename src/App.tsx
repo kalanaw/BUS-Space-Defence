@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { formatCountdown, formatEta, timerTone, evacuatedLives } from './utils'
 
 type ThreatSeverity = 'Critical' | 'High' | 'Medium'
 type ThreatStatus = 'Inbound' | 'Targeted' | 'Intercept Window' | 'Neutralized'
@@ -274,17 +275,6 @@ const initialMissionLog: MissionEntry[] = [
 
 const evacuationSequence: ColonyStage[] = ['Standby', 'Boarding', 'Launch', 'Cleared']
 
-function formatCountdown(secondsRemaining: number) {
-  const minutes = Math.floor(secondsRemaining / 60)
-  const seconds = secondsRemaining % 60
-
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-}
-
-function formatEta(minutes: number) {
-  return `T-${String(minutes).padStart(2, '0')}:00`
-}
-
 function App() {
   const [secondsRemaining, setSecondsRemaining] = useState(47 * 60)
   const [threats, setThreats] = useState(initialThreats)
@@ -312,7 +302,7 @@ function App() {
   const appendMissionLog = (level: LogLevel, text: string) => {
     setMissionLog((currentLog) => [
       {
-        id: currentLog[0]?.id ? currentLog[0].id + 1 : 1,
+        id: Math.max(0, ...currentLog.map((e) => e.id)) + 1,
         stamp: `T-${formatCountdown(secondsRemaining)}`,
         level,
         text,
@@ -541,8 +531,8 @@ function App() {
   const currentAsset = defenseAssets.find((asset) => asset.id === selectedAssetId)
   const criticalThreats = threats.filter((threat) => threat.severity === 'Critical' && threat.status !== 'Neutralized').length
   const activeIntercepts = defenseAssets.filter((asset) => asset.assignedThreatId).length
-  const evacuatedLives = colonies.reduce((total, colony) => total + Math.round((Number(colony.population.replace(/[^\d.]/g, '')) || 0) * colony.readiness), 0)
-  const timerTone = secondsRemaining <= 900 ? 'red' : secondsRemaining <= 1800 ? 'amber' : 'blue'
+  const totalEvacuatedLives = evacuatedLives(colonies)
+  const tone = timerTone(secondsRemaining)
 
   return (
     <div className="app-shell">
@@ -556,7 +546,7 @@ function App() {
           </p>
         </div>
 
-        <div className={`countdown countdown--${timerTone}`}>
+        <div className={`countdown countdown--${tone}`}>
           <span className="countdown__label">First impact in</span>
           <strong className="countdown__value">{formatCountdown(secondsRemaining)}</strong>
           <span className="countdown__note">Commander Vex: build, track, route, and hold the line.</span>
@@ -767,7 +757,7 @@ function App() {
             </div>
             <div className="summary-chip">
               <span>Lives moved to safety</span>
-              <strong>{evacuatedLives.toLocaleString()}</strong>
+              <strong>{totalEvacuatedLives.toLocaleString()}</strong>
             </div>
           </div>
 
