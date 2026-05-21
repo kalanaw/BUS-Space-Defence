@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatCountdown, formatEta, timerTone, evacuatedLives } from '../utils'
+import { formatCountdown, formatEta, timerTone, evacuatedLives, parsePopulation } from '../utils'
 
 describe('formatCountdown', () => {
   it('formats the initial 47-minute countdown correctly', () => {
@@ -50,15 +50,41 @@ describe('timerTone', () => {
   })
 })
 
+describe('parsePopulation', () => {
+  it('parses M suffix as millions', () => {
+    expect(parsePopulation('1.1M')).toBe(1_100_000)
+  })
+
+  it('parses K suffix as thousands', () => {
+    expect(parsePopulation('740K')).toBe(740_000)
+  })
+
+  it('parses lowercase k suffix as thousands', () => {
+    expect(parsePopulation('500k')).toBe(500_000)
+  })
+
+  it('parses lowercase m suffix as millions', () => {
+    expect(parsePopulation('2m')).toBe(2_000_000)
+  })
+
+  it('parses plain numeric string', () => {
+    expect(parsePopulation('1000')).toBe(1000)
+  })
+
+  it('returns 0 for unrecognised input', () => {
+    expect(parsePopulation('')).toBe(0)
+  })
+})
+
 describe('evacuatedLives', () => {
-  it('sums lives across all colonies based on readiness', () => {
+  it('applies M/K multipliers and sums lives across all colonies based on readiness', () => {
     const colonies = [
-      { population: '1.1M', readiness: 38 },  // 1.1 * 38 = 41.8 → 42
-      { population: '740K', readiness: 26 },   // 740 * 26 = 19240
-      { population: '560K', readiness: 49 },   // 560 * 49 = 27440
+      { population: '1.1M', readiness: 38 },  // Math.round(1_100_000 * 38 / 100) = 418_000
+      { population: '740K', readiness: 26 },   // Math.round(740_000 * 26 / 100)  = 192_400
+      { population: '560K', readiness: 49 },   // Math.round(560_000 * 49 / 100)  = 274_400
     ]
     const result = evacuatedLives(colonies)
-    expect(result).toBe(42 + 19240 + 27440)
+    expect(result).toBe(418_000 + 192_400 + 274_400)
   })
 
   it('returns 0 when readiness is 0', () => {
@@ -68,7 +94,7 @@ describe('evacuatedLives', () => {
 
   it('returns the full population count when readiness is 100', () => {
     const colonies = [{ population: '500K', readiness: 100 }]
-    expect(evacuatedLives(colonies)).toBe(500 * 100)
+    expect(evacuatedLives(colonies)).toBe(500_000)
   })
 
   it('handles an empty colony list', () => {

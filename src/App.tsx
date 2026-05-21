@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import { formatCountdown, formatEta, timerTone, evacuatedLives } from './utils'
 
@@ -277,12 +277,17 @@ const evacuationSequence: ColonyStage[] = ['Standby', 'Boarding', 'Launch', 'Cle
 
 function App() {
   const [secondsRemaining, setSecondsRemaining] = useState(47 * 60)
+  const secondsRemainingRef = useRef(secondsRemaining)
   const [threats, setThreats] = useState(initialThreats)
   const [colonies, setColonies] = useState(initialColonies)
   const [defenseAssets, setDefenseAssets] = useState(initialDefenseAssets)
   const [missionLog, setMissionLog] = useState(initialMissionLog)
   const [selectedAssetId, setSelectedAssetId] = useState<string>('df-01')
   const [threatFilter, setThreatFilter] = useState<ThreatFilter>('All')
+
+  useEffect(() => {
+    secondsRemainingRef.current = secondsRemaining
+  })
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -303,7 +308,7 @@ function App() {
     setMissionLog((currentLog) => [
       {
         id: Math.max(0, ...currentLog.map((e) => e.id)) + 1,
-        stamp: `T-${formatCountdown(secondsRemaining)}`,
+        stamp: `T-${formatCountdown(secondsRemainingRef.current)}`,
         level,
         text,
       },
@@ -659,7 +664,7 @@ function App() {
 
           <div className="colony-list">
             {colonies.map((colony) => (
-              <div key={colony.id} className="colony-card">
+              <div key={colony.id} className={`colony-card colony-card--stage-${colony.stage.toLowerCase()}`}>
                 <div className="colony-card__headline">
                   <div>
                     <p>{colony.name}</p>
@@ -669,8 +674,18 @@ function App() {
                 </div>
 
                 <p className="colony-route">{colony.route}</p>
-                <div className="progress-track" aria-hidden="true">
-                  <div className="progress-track__fill" style={{ width: `${colony.readiness}%` }} />
+                <div
+                  className="progress-track"
+                  role="progressbar"
+                  aria-valuenow={colony.readiness}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label={`${colony.name} evacuation readiness: ${colony.readiness}%`}
+                >
+                  <div
+                    className={`progress-track__fill progress-track__fill--${colony.readiness < 40 ? 'low' : colony.readiness < 70 ? 'mid' : 'high'}`}
+                    style={{ width: `${colony.readiness}%` }}
+                  />
                 </div>
 
                 <div className="colony-card__footer">
@@ -767,7 +782,7 @@ function App() {
                 <div className="log-entry__stamp">{entry.stamp}</div>
                 <div>
                   <p>{entry.text}</p>
-                  <span>{entry.level}</span>
+                  <span className="log-entry__level">{entry.level}</span>
                 </div>
               </div>
             ))}

@@ -350,6 +350,126 @@ button:disabled {
   transform: none;
 }
 
+button:focus-visible {
+  outline: 2px solid rgba(95, 245, 255, 0.7);
+  outline-offset: 2px;
+}
+
+/* ── Evacuation Planner: stage-based card accents ──────────────────────── */
+.colony-card--stage-standby {
+  border-left: 3px solid rgba(95, 245, 255, 0.22);
+}
+
+.colony-card--stage-boarding {
+  border-left: 3px solid rgba(255, 176, 95, 0.55);
+}
+
+.colony-card--stage-launch {
+  border-left: 3px solid rgba(120, 255, 180, 0.6);
+  background: rgba(4, 14, 10, 0.88);
+}
+
+.colony-card--stage-cleared {
+  border-left: 3px solid rgba(95, 245, 255, 0.15);
+  opacity: 0.55;
+}
+
+/* ── Progress track fill: urgency variants ─────────────────────────────── */
+.progress-track__fill--low {
+  background: linear-gradient(90deg, #ff6666 0%, #ffb060 100%);
+}
+
+.progress-track__fill--mid {
+  background: linear-gradient(90deg, #ffb060 0%, #ffe680 100%);
+}
+
+.progress-track__fill--high {
+  background: linear-gradient(90deg, #5ff5ff 0%, #a8ffc0 100%);
+}
+
+/* ── Mission Log: left-rail severity accent ────────────────────────────── */
+.log-entry--alert {
+  border-left: 3px solid rgba(255, 102, 102, 0.65);
+}
+
+.log-entry--command {
+  border-left: 3px solid rgba(255, 176, 95, 0.55);
+}
+
+.log-entry--system {
+  border-left: 3px solid rgba(95, 245, 255, 0.35);
+}
+
+/* ── Log level badge ───────────────────────────────────────────────────── */
+.log-entry--alert .log-entry__level,
+.log-entry--command .log-entry__level,
+.log-entry--system .log-entry__level {
+  display: inline-block;
+  margin-top: 0.45rem;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.64rem;
+}
+
+.log-entry--alert .log-entry__level {
+  color: #ffb0b0;
+  border: 1px solid rgba(255, 102, 102, 0.28);
+  background: rgba(255, 102, 102, 0.1);
+}
+
+.log-entry--command .log-entry__level {
+  color: #ffd7a8;
+  border: 1px solid rgba(255, 176, 95, 0.28);
+  background: rgba(255, 176, 95, 0.08);
+}
+
+.log-entry--system .log-entry__level {
+  color: #9ceeff;
+  border: 1px solid rgba(95, 245, 255, 0.22);
+  background: rgba(95, 245, 255, 0.07);
+}
+
+/* ── Log entry slide-in animation ─────────────────────────────────────── */
+@keyframes logEntryIn {
+  from {
+    opacity: 0;
+    transform: translateX(-0.6rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.log-entry {
+  animation: logEntryIn 300ms ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .log-entry {
+    animation: none;
+  }
+}
+
+/* ── Mission Log custom scrollbar ─────────────────────────────────────── */
+.log-list::-webkit-scrollbar {
+  width: 0.3rem;
+}
+
+.log-list::-webkit-scrollbar-track {
+  background: rgba(147, 186, 217, 0.06);
+  border-radius: 999px;
+}
+
+.log-list::-webkit-scrollbar-thumb {
+  background: rgba(95, 245, 255, 0.2);
+  border-radius: 999px;
+}
+
+.log-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(95, 245, 255, 0.38);
+}
+
 @media (max-width: 1080px) {
   .command-header,
   .dashboard-grid,
