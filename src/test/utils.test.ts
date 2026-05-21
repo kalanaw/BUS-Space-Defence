@@ -101,3 +101,17 @@ describe('evacuatedLives', () => {
     expect(evacuatedLives([])).toBe(0)
   })
 })
+
+describe('parsePopulation — additional edge cases', () => {
+  it('parses a decimal K value correctly', () => {
+    expect(parsePopulation('1.5K')).toBe(1_500)
+  })
+
+  it('returns 0 for alphabetic (non-numeric) input', () => {
+    expect(parsePopulation('abc')).toBe(0)
+  })
+
+  it('returns 0 for a bare suffix with no leading digits', () => {
+    expect(parsePopulation('M')).toBe(0)
+  })
+})

@@ -231,3 +231,99 @@ describe('Mission Log', () => {
     expect(screen.getAllByRole('paragraph').length).toBeGreaterThan(initialEntries)
   })
 })
+
+describe('Bug #3 — Fragments tracked stat is hardcoded', () => {
+  it('Fragments tracked decrements after a threat is neutralized', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    const strip = screen.getByRole('region', { name: 'Global status overview' })
+    expect(within(strip).getByText('12')).toBeInTheDocument()
+    await user.click(screen.getAllByRole('button', { name: /Mark Neutralized/i })[0])
+    // Hardcoded <strong>12</strong> in App.tsx means this FAILS — Bug #3 open
+    expect(within(strip).getByText('11')).toBeInTheDocument()
+  })
+})
+
+describe('Bug #4 — Cycle Readiness has no Engaged handler', () => {
+  it('Cycle Readiness button is disabled when the selected asset is Engaged', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    // Assign Aegis Lance Array to first threat — it becomes Engaged
+    await user.click(screen.getAllByRole('button', { name: /Assign Selected Asset/i })[0])
+    const cycleButtons = screen.getAllByRole('button', { name: /Cycle Readiness/i })
+    // Button is not disabled in current code — Bug #4 open
+    expect(cycleButtons[0]).toBeDisabled()
+  })
+})
+
+describe('Defense Grid — edge cases', () => {
+  it('prevents assigning a cooling asset and appends a warning to the mission log', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    // Nova Screen IX is the 3rd "Select Asset" button (Aegis is selected by default)
+    const selectButtons = screen.getAllByRole('button', { name: /^Select Asset$/i })
+    await user.click(selectButtons[2]) // Nova Screen IX (Cooling)
+    await user.click(screen.getAllByRole('button', { name: /Assign Selected Asset/i })[0])
+    expect(screen.getByText(/cooling cycle/i)).toBeInTheDocument()
+    const strip = screen.getByRole('region', { name: 'Global status overview' })
+    expect(within(strip).getByText('0')).toBeInTheDocument()
+  })
+
+  it('prevents assigning an already-locked asset to a second threat', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    // Assign Aegis to first threat
+    await user.click(screen.getAllByRole('button', { name: /Assign Selected Asset/i })[0])
+    // Attempt to assign same asset to second threat
+    await user.click(screen.getAllByRole('button', { name: /Assign Selected Asset/i })[1])
+    expect(screen.getByText(/already locked to another fragment/i)).toBeInTheDocument()
+  })
+
+  it('active intercepts returns to 0 after releasing a lock', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    const strip = screen.getByRole('region', { name: 'Global status overview' })
+    await user.click(screen.getAllByRole('button', { name: /Assign Selected Asset/i })[0])
+    expect(within(strip).getByText('1')).toBeInTheDocument()
+    await user.click(screen.getAllByRole('button', { name: /Release Lock/i })[0])
+    expect(within(strip).getByText('0')).toBeInTheDocument()
+  })
+})
+
+describe('Evacuation Planner — readiness and log', () => {
+  it('readiness percentage rises by 24 after Advance Phase', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    // Orion Spindle starts at 26% readiness (Standby stage)
+    expect(screen.getByText('26% complete')).toBeInTheDocument()
+    const advanceBtns = screen.getAllByRole('button', { name: /Advance Phase/i })
+    await user.click(advanceBtns[1]) // Orion Spindle: 26 + 24 = 50
+    expect(screen.getByText('50% complete')).toBeInTheDocument()
+  })
+
+  it('logs a command entry immediately when an evacuation phase advances', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    const advanceBtns = screen.getAllByRole('button', { name: /Advance Phase/i })
+    await user.click(advanceBtns[1]) // Orion Spindle → Boarding
+    expect(screen.getByText(/Orion Spindle advanced to BOARDING/i)).toBeInTheDocument()
+  })
+})
+
+describe('Mission Log — ordering and content', () => {
+  it('newest log entry appears first after an action', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getAllByRole('button', { name: /Assign Selected Asset/i })[0])
+    const logEntries = within(screen.getByRole('log')).getAllByRole('paragraph')
+    expect(logEntries[0].textContent).toMatch(/committed against/i)
+  })
+
+  it('neutralized threat remains visible in the list for auditability', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getAllByRole('button', { name: /Mark Neutralized/i })[0])
+    // Spec: "Neutralized: fragment stays visible for auditability"
+    expect(screen.getByText('KX-01 Helios Spear')).toBeInTheDocument()
+  })
+})
